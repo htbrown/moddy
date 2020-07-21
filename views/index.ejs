@@ -36,13 +36,67 @@
                             <input type="text" class="form-control" id="commandResponse" name="commandResponse"
                                 aria-describedby="responseHelp">
                             <small id="responseHelp" class="form-text text-muted">You can use placeholders to show the
-                                user name etc.</small>
+                                user's name etc.</small>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <input type="submit" class="btn btn-primary" value="Save" form="addForm"></input>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Command</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Are you sure you would like to delete that command?
+                    </p>
+                    <form id="deleteForm" action="/api/delete" method="POST">
+                        <div class="form-group">
+                            <label for="commandName">Command</label>
+                            <input type="text" class="form-control" id="commandName" name="commandName">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-danger" value="Delete" form="deleteForm"></input>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Command</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" action="/api/edit" method="POST">
+                        <div class="form-group" style="display: none;">
+                            <input type="text" class="form-control" id="commandName" name="commandName">
+                        </div>
+                        <div class="form-group">
+                            <label for="commandResponse">Response</label>
+                            <input type="text" class="form-control" id="commandResponse" name="commandResponse">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Save" form="editForm"></input>
                 </div>
             </div>
         </div>
@@ -60,13 +114,15 @@
                     <th scope="col">Command</th>
                     <th scope="col">Response</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <% data.forEach(d => { %>
             <tbody>
                 <td><%= d.id %></td>
                 <td><%= d.response %></td>
-                <td><a href="javascript:void()">Delete</a></td>
+                <td><a href="javascript:void()" data-toggle="modal" data-target="#editModal" data-command="<%- d.id %>" data-response="<%- d.response %>">Edit</a></td>
+                <td><a href="javascript:void()" data-toggle="modal" data-target="#deleteModal" data-command="<%- d.id %>">Delete</a></td>
             </tbody>
             <% }) %>
         </table>
