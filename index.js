@@ -39,8 +39,10 @@ async function onMessageHandler (channel, user, message, self) {
     log.info(`${command} was run by ${user.username}.`)
 
     let dbCommand = (await r.table('commands').get(command).run(client.dbConn));
+    let response = dbCommand.response
+                        .replace('<user>', user.username)
     if (dbCommand) {
-        client.say(channel, dbCommand.response.replace('<user>', user.username))
+        client.say(channel, response)
     }
 }
 
@@ -89,6 +91,60 @@ app.post('/api/create', async (req, res) => {
             log.error(err);
         }
         res.redirect('/');
+    })
+})
+
+app.post('/api/delete', async (req, res) => {
+    if (!req.body.commandName) {
+        req.flash('error', 'No command was specified for deletion.');
+        res.redirect('/');
+        return;
+    }
+
+    let command = (await r.table('commands').get(req.body.commandName).run(client.dbConn));
+    if (!command) {
+        req.flash('error', 'The specified command wasn\'t found.');
+        res.redirect('/');
+        return;
+    }
+
+    r.table('commands').get(req.body.commandName).delete().run(client.dbConn, (err) => {
+        if (err) {
+            req.flash('error', 'An error occured while trying to delete that command. The error has been logged.');
+            res.redirect('/');
+            log.error(err);
+            return;
+        } else {
+            res.redirect('/');
+            return;
+        }
+    })
+})
+
+app.post('/api/edit', async (req, res) => {
+    if (!req.body.commandName || !req.body.commandResponse) {
+        req.flash('error', 'All fields are required.');
+        res.redirect('/');
+        return;
+    }
+
+    let command = (await r.table('commands').get(req.body.commandName).run(client.dbConn));
+    if (!command) {
+        req.flash('error', 'The specified command wasn\'t found.');
+        res.redirect('/');
+        return;
+    }
+
+    r.table('commands').get(req.body.commandName).update({ response: req.body.commandResponse }).run(client.dbConn, (err) => {
+        if (err) {
+            req.flash('error', 'An error occured while trying to edit that command. The error has been logged.');
+            res.redirect('/');
+            log.error(err);
+            return;
+        } else {
+            res.redirect('/');
+            return;
+        }
     })
 })
 
