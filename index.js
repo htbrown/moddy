@@ -34,28 +34,63 @@ async function onMessageHandler (channel, user, message, self) {
     if (self) { return; }
   
     if (!message.startsWith(config.prefix)) return;
-    const [ command, ...args ] = message.trim().substring(config.prefix.length).split(" ");
+    let [ command, ...args ] = message.trim().substring(config.prefix.length).split(" ");
+
+    let channelName = channel.split('');
+    channelName.shift();
+    channelName = channelName.join('');
 
     log.info(`${command} was run by ${user.username}.`)
 
     let dbCommand = (await r.table('commands').get(command).run(client.dbConn));
-    let response = dbCommand.response
-                        .replace('<user>', user.username)
+
     if (dbCommand) {
-        client.say(channel, response)
+        let response = dbCommand.response
+            .replace('<user>', user.username);
+
+        client.say(channel, response);
+        return;
+    }
+
+    switch (command) {
+        case 'ban':
+            if (user.mod || user.username == channelName) {
+                if (!args[0]) return client.say(channel, `${user.username}, You need to give me a user to ban.`);
+                client.ban(channel, args[0], args[1])
+                client.say(channel, `${user.username}, I have banned ${args[0]} from the channel.`);
+                break;
+            }
+        case 'unban':
+            if (user.mod || user.username == channelName) {
+                if (!args[0]) return client.say(channel, `${user.username}, You need to give me a user to unban.`);
+                client.unban(channel, args[0]);
+                client.say(channel, `${user.username}, I have unbanned ${args[0]} from the channel.`);
+                break;
+            }
+        case 'timeout':
+            if (user.mod || user.username == channelName) {
+                if (!args[0] || !args[1]) return client.say(channel, `${user.username}, You need to give me a user to timeout and a time in minutes.`);
+                client.timeout(channel, args[0], args[1] * 60).catch(err => {
+                    if (err) console.log(err);
+                });
+                client.say(channel, `${user.username}, I have timed out ${args[0]} for ${args[1]} minute(s).`);
+                break;
+            }
     }
 }
 
 app.set('view engine', 'ejs');
 app.use('/static', express.static('static'));
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(flash());
 app.use(session({
     secret: 'gamer time',
     cookie: {
         maxAge: 60000
-    }
+    },
+    resave: false,
+    saveUninitialized: false
 }));
 
 app.get('/', async (req, res) => {
@@ -72,6 +107,12 @@ app.post('/api/create', async (req, res) => {
 
     if (!req.body.commandName || !req.body.commandResponse) {
         req.flash('error', 'Incomplete request. All fields are required.');
+        res.redirect('/');
+        return;
+    }
+
+    if (req.body.commandName == 'ban' || req.body.commandName == 'timeout' || req.body.commandName == 'unban') {
+        req.flash('error', `The command name ${req.body.commandName} is unavailable.`);
         res.redirect('/');
         return;
     }
