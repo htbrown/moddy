@@ -108,6 +108,10 @@ app.get('/', async (req, res) => {
     });
 })
 
+app.get('/placeholders', async (req, res) => {
+    res.render('placeholders');
+})
+
 app.post('/api/create', async (req, res) => {
     let command = (await r.table('commands').get(req.body.commandName).run(client.dbConn));
 
@@ -185,7 +189,6 @@ app.post('/api/edit', async (req, res) => {
 
     r.table('commands').get(req.body.commandName).update({
         response: req.body.commandResponse,
-        type: req.body.commandType.toLowerCase()
     }).run(client.dbConn, (err) => {
         if (err) {
             req.flash('error', 'An error occured while trying to edit that command. The error has been logged.');
