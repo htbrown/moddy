@@ -20,5 +20,5 @@ Please know that I am one person and, unless other people decide to help, I migh
 
 ## Licence
 
-See the [licence file](https://github.com/htbrown/moddy/).
+See the [licence file](https://github.com/htbrown/moddy/blob/master/LICENSE).
 
