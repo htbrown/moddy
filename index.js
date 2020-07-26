@@ -108,10 +108,6 @@ app.get('/', async (req, res) => {
     });
 })
 
-app.get('/placeholders', async (req, res) => {
-    res.render('placeholders');
-})
-
 app.post('/api/create', async (req, res) => {
     let command = (await r.table('commands').get(req.body.commandName).run(client.dbConn));
 
