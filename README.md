@@ -1,5 +1,8 @@
 # Moddy
 
+[![GitHub license](https://img.shields.io/github/license/htbrown/moddy?style=flat-square)](https://github.com/htbrown/moddy/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/htbrown/moddy?style=flat-square)](https://github.com/htbrown/moddy/issues)
+
 Moddy is an easy-to-use, self-hosted Twitch moderation bot which allows you to add your own custom commands.
 
 ## Setup Guide
