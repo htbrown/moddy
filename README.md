@@ -13,6 +13,11 @@ For a setup guide, [see the wiki](https://github.com/htbrown/moddy/wiki).
 
 Pull requests are welcome! If you've found something you think you can improve, let me know!
 
+## To Do
+
+- Add punishments/moderation actions to a database and add a page on the dashboard to view all punishments.
+- Make the dashboard prettier.
+
 ## Support
 
 If you need help, feel free to submit an [issue](https://github.com/htbrown/moddy/issues).
