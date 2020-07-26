@@ -48,7 +48,13 @@ async function onMessageHandler (channel, user, message, self) {
         let response = dbCommand.response
             .replace('<user>', user.username);
 
-        client.say(channel, response);
+        if (dbCommand.type == 'whisper') {
+            client.whisper(user.username, response);
+            client.say(channel, `${user.username}, Check your whispers.`)
+        } else {
+            client.say(channel, response);
+        }
+
         return;
     }
 
@@ -125,7 +131,8 @@ app.post('/api/create', async (req, res) => {
 
     r.table('commands').insert({
         id: req.body.commandName,
-        response: req.body.commandResponse
+        response: req.body.commandResponse,
+        type: req.body.commandType.toLowerCase()
     }).run(client.dbConn, (err) => {
         if (err) {
             req.flash('error', 'An error occured while adding the command to the database. Maybe it\'s a duplicate? This has been logged.');
@@ -176,7 +183,10 @@ app.post('/api/edit', async (req, res) => {
         return;
     }
 
-    r.table('commands').get(req.body.commandName).update({ response: req.body.commandResponse }).run(client.dbConn, (err) => {
+    r.table('commands').get(req.body.commandName).update({
+        response: req.body.commandResponse,
+        type: req.body.commandType.toLowerCase()
+    }).run(client.dbConn, (err) => {
         if (err) {
             req.flash('error', 'An error occured while trying to edit that command. The error has been logged.');
             res.redirect('/');

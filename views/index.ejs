@@ -38,6 +38,13 @@
                             <small id="responseHelp" class="form-text text-muted">You can use placeholders to show the
                                 user's name etc.</small>
                         </div>
+                        <div class="form-group">
+                            <label for="commandType">Type</label>
+                            <select name="commandType" id="commandType" class="form-control">
+                                <option>Message</option>
+                                <option>Whisper</option>
+                            </select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -92,6 +99,13 @@
                             <label for="commandResponse">Response</label>
                             <input type="text" class="form-control" id="commandResponse" name="commandResponse">
                         </div>
+                        <div class="form-group">
+                            <label for="commandType">Type</label>
+                            <select name="commandType" id="commandType" class="form-control">
+                                <option>Message</option>
+                                <option>Whisper</option>
+                            </select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -113,6 +127,7 @@
                 <tr>
                     <th scope="col">Command</th>
                     <th scope="col">Response</th>
+                    <th scope="col">Type</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -121,6 +136,7 @@
             <tbody>
                 <td><%= d.id %></td>
                 <td><%= d.response %></td>
+                <td><%= d.type %></td>
                 <td><a href="javascript:void()" data-toggle="modal" data-target="#editModal" data-command="<%- d.id %>" data-response="<%- d.response %>">Edit</a></td>
                 <td><a href="javascript:void()" data-toggle="modal" data-target="#deleteModal" data-command="<%- d.id %>">Delete</a></td>
             </tbody>
