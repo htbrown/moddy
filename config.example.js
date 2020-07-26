@@ -11,7 +11,7 @@ module.exports = {
     web: {
         port: 4000
     },
-    prefix: '!',
+    prefix: 'PREFIX',
     db: {
         port: 28015,
         host: 'localhost',
