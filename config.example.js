@@ -1,11 +1,11 @@
 module.exports = {
     tmi: {
         identity: {
-            username: '',
-            password: ''
+            username: 'BOT_USERNAME',
+            password: 'OAUTH_TOKEN'
         },
         channels: [
-            ''
+            'CHANNEL_NAME'
         ]
     },
     web: {
@@ -14,7 +14,7 @@ module.exports = {
     prefix: '!',
     db: {
         port: 28015,
-        host: '',
-        db: ''
+        host: 'localhost',
+        db: 'twitch'
     }
 }
